@@ -1,6 +1,6 @@
 import { defineSerializer } from "./builder";
 
-export const jsonSerializer = defineSerializer({
+export const jsonSerializer = defineSerializer(() => ({
   serialize(data) {
     return JSON.stringify({ data });
   },
@@ -8,4 +8,4 @@ export const jsonSerializer = defineSerializer({
     const { data } = JSON.parse(serialized);
     return data;
   },
-});
+}));
