@@ -1,0 +1,23 @@
+{
+  "name": "cache-wrap",
+  "version": "0.0.1",
+  "description": "Cache the result of function calls",
+  "license": "MIT",
+  "author": {
+    "name": "Nonthaphat Chaisu",
+    "email": "hi@podter.me",
+    "url": "https://podter.me"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "lint": "tsc"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3"
+  },
+  "packageManager": "pnpm@9.15.4"
+}
