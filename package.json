@@ -37,6 +37,7 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.11",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
     "@types/node": "^22.10.7",
     "ioredis": "^5.4.2",
