@@ -20,50 +20,52 @@ async function cleanup<T extends StorageValue>(storage: Storage<T>) {
   );
 }
 
-export const unstorageDriver = defineDriver(
-  ({ storage, doCleanup }: UnstorageDriverOpts<string>) => {
-    return {
-      async get(key) {
-        if (doCleanup) {
-          await cleanup(storage);
-        }
+export const unstorageDriver = defineDriver<
+  string,
+  UnstorageDriverOpts<string>
+>(({ storage, doCleanup }) => {
+  return {
+    async get(key) {
+      if (doCleanup) {
+        await cleanup(storage);
+      }
 
-        return await storage.getItem(key);
-      },
-      async set(key, value, ttl) {
-        if (doCleanup) {
-          await cleanup(storage);
-        }
+      return await storage.getItem(key);
+    },
+    async set(key, value, ttl) {
+      if (doCleanup) {
+        await cleanup(storage);
+      }
 
-        await storage.setItem(key, value);
-        if (ttl) {
-          await storage.setMeta(key, { ttl: Date.now() + ttl * 1000 });
-        }
-      },
-    };
-  },
-);
+      await storage.setItem(key, value);
+      if (ttl) {
+        await storage.setMeta(key, { ttl: Date.now() + ttl * 1000 });
+      }
+    },
+  };
+});
 
-export const unstorageBufferDriver = defineDriver(
-  ({ storage, doCleanup }: UnstorageDriverOpts<Buffer>) => {
-    return {
-      async get(key) {
-        if (doCleanup) {
-          await cleanup(storage);
-        }
+export const unstorageBufferDriver = defineDriver<
+  Buffer,
+  UnstorageDriverOpts<Buffer>
+>(({ storage, doCleanup }) => {
+  return {
+    async get(key) {
+      if (doCleanup) {
+        await cleanup(storage);
+      }
 
-        return await storage.getItemRaw<Buffer>(key);
-      },
-      async set(key, value, ttl) {
-        if (doCleanup) {
-          await cleanup(storage);
-        }
+      return await storage.getItemRaw<Buffer>(key);
+    },
+    async set(key, value, ttl) {
+      if (doCleanup) {
+        await cleanup(storage);
+      }
 
-        await storage.setItemRaw<Buffer>(key, value);
-        if (ttl) {
-          await storage.setMeta(key, { ttl: Date.now() + ttl * 1000 });
-        }
-      },
-    };
-  },
-);
+      await storage.setItemRaw<Buffer>(key, value);
+      if (ttl) {
+        await storage.setMeta(key, { ttl: Date.now() + ttl * 1000 });
+      }
+    },
+  };
+});

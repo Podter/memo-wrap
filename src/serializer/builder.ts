@@ -3,12 +3,18 @@ export interface Serializer<SerializedType> {
   deserialize(serialized: SerializedType): object;
 }
 
-export type SerializerFactory<SerializedType, Args extends any[]> = (
-  ...args: Args
-) => Serializer<SerializedType>;
+export type SerializerFactory<
+  SerializedType,
+  Opts extends object | undefined = undefined,
+> = Opts extends object
+  ? (opts: Opts) => Serializer<SerializedType>
+  : () => Serializer<SerializedType>;
 
-export function defineSerializer<SerializedType, Args extends any[]>(
-  factory: SerializerFactory<SerializedType, Args>,
-): SerializerFactory<SerializedType, Args> {
+export function defineSerializer<
+  SerializedType,
+  Opts extends object | undefined,
+>(
+  factory: SerializerFactory<SerializedType, Opts>,
+): SerializerFactory<SerializedType, Opts> {
   return factory;
 }

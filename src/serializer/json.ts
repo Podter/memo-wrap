@@ -1,6 +1,6 @@
 import { defineSerializer } from "./builder";
 
-export const jsonSerializer = defineSerializer(() => ({
+export const jsonSerializer = defineSerializer<string, undefined>(() => ({
   serialize(data) {
     return JSON.stringify({ data });
   },

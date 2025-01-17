@@ -9,8 +9,8 @@ export interface MemoryDriverOpts {
   doCleanup?: boolean;
 }
 
-export const memoryDriver = defineDriver(
-  ({ doCleanup = true }: MemoryDriverOpts) => {
+export const memoryDriver = defineDriver<string | Buffer, MemoryDriverOpts>(
+  ({ doCleanup = true }) => {
     const data = new Map<string, DataType>();
 
     function cleanup() {
