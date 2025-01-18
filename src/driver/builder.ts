@@ -1,20 +1,24 @@
 import type { Awaitable } from "~/types";
 
-export interface Driver<CacheValue> {
-  get: (key: string) => Awaitable<CacheValue | null>;
-  set: (key: string, value: CacheValue, ttl?: number) => Awaitable<void>;
+export interface Driver<SerializedType> {
+  get: (key: string) => Awaitable<SerializedType | null>;
+  set: (key: string, value: SerializedType, ttl?: number) => Awaitable<void>;
 }
 
 export type DriverFactory<
-  CacheValue,
+  SerializedType,
   Opts extends object | undefined,
 > = Opts extends object
-  ? (opts: Opts) => Driver<CacheValue>
-  : () => Driver<CacheValue>;
+  ? (opts: Opts) => Driver<SerializedType>
+  : Opts extends object & undefined
+    ? (opts?: Opts) => Driver<SerializedType>
+    : () => Driver<SerializedType>;
 
 export function defineDriver<
-  CacheValue,
+  SerializedType,
   Opts extends object | undefined = undefined,
->(factory: DriverFactory<CacheValue, Opts>): DriverFactory<CacheValue, Opts> {
+>(
+  factory: DriverFactory<SerializedType, Opts>,
+): DriverFactory<SerializedType, Opts> {
   return factory;
 }
