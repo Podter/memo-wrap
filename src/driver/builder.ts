@@ -7,7 +7,7 @@ export interface Driver<CacheValue> {
 
 export type DriverFactory<
   CacheValue,
-  Opts extends object | undefined = undefined,
+  Opts extends object | undefined,
 > = Opts extends object
   ? (opts: Opts) => Driver<CacheValue>
   : () => Driver<CacheValue>;

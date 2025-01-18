@@ -5,14 +5,14 @@ export interface Serializer<SerializedType> {
 
 export type SerializerFactory<
   SerializedType,
-  Opts extends object | undefined = undefined,
+  Opts extends object | undefined,
 > = Opts extends object
   ? (opts: Opts) => Serializer<SerializedType>
   : () => Serializer<SerializedType>;
 
 export function defineSerializer<
   SerializedType,
-  Opts extends object | undefined,
+  Opts extends object | undefined = undefined,
 >(
   factory: SerializerFactory<SerializedType, Opts>,
 ): SerializerFactory<SerializedType, Opts> {

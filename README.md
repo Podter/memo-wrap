@@ -89,7 +89,7 @@ You can create your own serializer by using the `defineSerializer` function:
 ```ts
 import { defineSerializer } from "memo-wrap/serializer/builder";
 
-const jsonSerializer = defineSerializer(() => {
+const jsonSerializer = defineSerializer<string, undefined>(() => {
   return {
     serialize: (data: any) => JSON.stringify(data),
     deserialize: (data: string) => JSON.parse(data),
