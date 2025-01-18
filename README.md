@@ -42,6 +42,21 @@ console.log(await add(1, 2));
 console.log(await add(1, 2));
 ```
 
+You need to create a `memo` function by calling `createMemoWrap` with the following options:
+
+- `driver`: The driver to store and retrieve the cache value.
+- `serializer`: The serializer to serialize and deserialize the cache value.
+
+Then you can create a memoized function by calling the `memo` function with the following arguments:
+
+- `fn`: The function to cache.
+- `key`: String, or a function that generates a string key based on the function arguments.
+- `opts`: The options object. (optional)
+  - `ttl`: The time-to-live in seconds. (optional)
+
+The `memo` function will return a memoized function that caches the result of the function calls.
+You can call the memoized function with the same arguments as the original function.
+
 ## Serializers
 
 Serializer is used to serialize and deserialize the cache value. memo-wrap has several built-in serializers:
@@ -82,25 +97,43 @@ const memo = createMemoWrap({
 });
 ```
 
-### BYO
+### Custom Serializer
 
-You can create your own serializer by using the `defineSerializer` function:
+You can create your own custom serializer by using the `defineSerializer` function.
+This function allows you to define how data should be serialized and deserialized before storing and retrieving it from the cache.
 
 ```ts
 import { defineSerializer } from "memo-wrap/serializer/builder";
 
-const jsonSerializer = defineSerializer<string, undefined>(() => {
+const customSerializer = defineSerializer<string, undefined>(() => {
   return {
-    serialize: (data: any) => JSON.stringify(data),
+    serialize: (data: object) => JSON.stringify(data),
     deserialize: (data: string) => JSON.parse(data),
   };
 });
 
 const memo = createMemoWrap({
-  serializer: jsonSerializer(),
+  serializer: customSerializer(),
   // ...
 });
 ```
+
+#### Type Parameters
+
+- `SerializedType`: The type of the serialized data.
+- `Opts`: The type of the options object, which is either an object or undefined.
+
+#### Methods
+
+##### `serialize(data: object): SerializedType`
+
+Serialize the data.
+Returns the serialized data.
+
+##### `deserialize(data: SerializedType): object`
+
+Deserialize the data.
+Returns the deserialized data.
 
 ## Drivers
 
@@ -148,41 +181,54 @@ const memo = createMemoWrap({
 });
 ```
 
-### BYO
+### Custom Driver
 
-You can create your own driver by using the `defineDriver` function:
+You can create your own custom driver by using the `defineDriver` function.
+This function allows you to define how data should be stored and retrieved from the cache.
 
 ```ts
-import { Redis } from "ioredis";
 import { defineDriver } from "memo-wrap/driver/builder";
 
-interface RedisDriverOpts {
-  redis: Redis;
+interface CustomDriverOpts {
+  // Define any options your driver needs
 }
 
-export const redisDriver = defineDriver<string, RedisDriverOpts>(
-  ({ redis }) => {
-    return {
-      async get(key) {
-        return await redis.get(key);
-      },
-      async set(key, value, ttl) {
-        await redis.set(key, value);
-        if (ttl) {
-          await redis.expire(key, ttl);
-        }
-      },
-    };
-  },
-);
+const customDriver = defineDriver<string, CustomDriverOpts>((opts) => {
+  return {
+    async get(key) {
+      // Implement your get logic here
+      return null;
+    },
+    async set(key, value, ttl) {
+      // Implement your set logic here
+    },
+  };
+});
 
 const memo = createMemoWrap({
-  driver: redisDriver({
-    redis: new Redis(),
+  driver: customDriver({
+    // Pass any options your driver needs here
   }),
   // ...
 });
 ```
+
+#### Type Parameters
+
+- `SerializedType`: The type of the serialized data.
+- `Opts`: The type of the options object, which is either an object or undefined.
+
+#### Methods
+
+##### `get(key: string): Awaitable<SerializedType | null>`
+
+Retrieve the cache value by key.
+Returns the cache value if it exists, otherwise returns `null`.
+
+##### `set(key: string, value: SerializedType, ttl?: number): Awaitable<void>`
+
+Store the cache value by key with a TTL.
+If `ttl` is not provided, the cache value will not expire.
 
 ## License
 

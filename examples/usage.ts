@@ -1,6 +1,6 @@
-import { createMemoWrap } from "../dist";
-import { memoryDriver } from "../dist/driver/memory";
-import { jsonSerializer } from "../dist/serializer/json";
+import { createMemoWrap } from "memo-wrap";
+import { memoryDriver } from "memo-wrap/driver/memory";
+import { jsonSerializer } from "memo-wrap/serializer/json";
 
 const memo = createMemoWrap({
   driver: memoryDriver({}), // Where to store the cache (memory, redis, etc)
