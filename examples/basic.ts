@@ -1,13 +1,13 @@
-import { createCacheWrap } from "../dist";
+import { createMemoWrap } from "../dist";
 import { memoryDriver } from "../dist/driver/memory";
 import { jsonSerializer } from "../dist/serializer/json";
 
-const cache = createCacheWrap({
+const memo = createMemoWrap({
   driver: memoryDriver({}), // Where to store the cache (memory, redis, etc)
   serializer: jsonSerializer(), // How to serialize the cache value (json, superjson, v8, etc)
 });
 
-const add = cache(
+const add = memo(
   // The function to cache
   async (a: number, b: number) => {
     await new Promise((resolve) => setTimeout(resolve, 3000));

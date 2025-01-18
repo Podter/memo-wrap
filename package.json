@@ -1,5 +1,5 @@
 {
-  "name": "cache-wrap",
+  "name": "memo-wrap",
   "version": "0.0.1",
   "description": "Cache the result of function calls",
   "license": "MIT",

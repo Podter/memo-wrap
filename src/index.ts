@@ -2,7 +2,7 @@ import type { Driver } from "./driver/builder";
 import type { Serializer } from "./serializer/builder";
 import type { Callback } from "./types";
 
-export interface CacheWrapOptions<
+export interface MemoWrapOptions<
   CacheValue,
   SerializedType extends CacheValue,
 > {
@@ -10,10 +10,10 @@ export interface CacheWrapOptions<
   serializer: Serializer<SerializedType>;
 }
 
-export function createCacheWrap<CacheValue, SerializedType extends CacheValue>({
+export function createMemoWrap<CacheValue, SerializedType extends CacheValue>({
   driver,
   serializer,
-}: CacheWrapOptions<CacheValue, SerializedType>) {
+}: MemoWrapOptions<CacheValue, SerializedType>) {
   return <T extends Callback>(
     callback: T,
     key: string | ((...args: Parameters<T>) => string),

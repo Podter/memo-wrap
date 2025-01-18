@@ -1,13 +1,13 @@
-# cache-wrap
+# memo-wrap
 
 Cache the result of function calls
 
 ```ts
-import { createCacheWrap } from "cache-wrap";
-import { memoryDriver } from "cache-wrap/driver/memory";
-import { jsonSerializer } from "cache-wrap/serializer/json";
+import { createMemoWrap } from "memo-wrap";
+import { memoryDriver } from "memo-wrap/driver/memory";
+import { jsonSerializer } from "memo-wrap/serializer/json";
 
-const cache = createCacheWrap({
+const memo = createMemoWrap({
   driver: memoryDriver({}), // Where to store the cache (memory, redis, etc)
   serializer: jsonSerializer(), // How to serialize the cache value (json, superjson, v8, etc)
 });
@@ -35,19 +35,19 @@ console.log(await add(1, 2));
 ## Installation
 
 ```sh
-npm i cache-wrap
+npm i memo-wrap
 ```
 
 ## Serializers
 
-Serializer is used to serialize and deserialize the cache value. cache-wrap has several built-in serializers:
+Serializer is used to serialize and deserialize the cache value. memo-wrap has several built-in serializers:
 
 ### JSON
 
 ```ts
-import { jsonSerializer } from "cache-wrap/serializer/json";
+import { jsonSerializer } from "memo-wrap/serializer/json";
 
-const cache = createCacheWrap({
+const memo = createMemoWrap({
   serializer: jsonSerializer(),
   // ...
 });
@@ -56,10 +56,10 @@ const cache = createCacheWrap({
 ### SuperJSON
 
 ```ts
-import { superjsonSerializer } from "cache-wrap/serializer/superjson";
+import { superjsonSerializer } from "memo-wrap/serializer/superjson";
 import SuperJSON from "superjson";
 
-const cache = createCacheWrap({
+const memo = createMemoWrap({
   serializer: superjsonSerializer({
     superjson: SuperJSON,
   }),
@@ -70,9 +70,9 @@ const cache = createCacheWrap({
 ### V8
 
 ```ts
-import { v8Serializer } from "cache-wrap/serializer/v8";
+import { v8Serializer } from "memo-wrap/serializer/v8";
 
-const cache = createCacheWrap({
+const memo = createMemoWrap({
   serializer: v8Serializer(), // Node.js only
   // ...
 });
@@ -83,7 +83,7 @@ const cache = createCacheWrap({
 You can create your own serializer by using the `defineSerializer` function:
 
 ```ts
-import { defineSerializer } from "cache-wrap/serializer/builder";
+import { defineSerializer } from "memo-wrap/serializer/builder";
 
 const jsonSerializer = defineSerializer(() => {
   return {
@@ -92,7 +92,7 @@ const jsonSerializer = defineSerializer(() => {
   };
 });
 
-const cache = createCacheWrap({
+const memo = createMemoWrap({
   serializer: jsonSerializer(),
   // ...
 });
@@ -100,14 +100,14 @@ const cache = createCacheWrap({
 
 ## Drivers
 
-Driver is used to store and retrieve the cache value. cache-wrap has several built-in drivers:
+Driver is used to store and retrieve the cache value. memo-wrap has several built-in drivers:
 
 ### Memory
 
 ```ts
-import { memoryDriver } from "cache-wrap/driver/memory";
+import { memoryDriver } from "memo-wrap/driver/memory";
 
-const cache = createCacheWrap({
+const memo = createMemoWrap({
   driver: memoryDriver({}),
   // ...
 });
@@ -116,10 +116,10 @@ const cache = createCacheWrap({
 ### Redis
 
 ```ts
-import { redisDriver } from "cache-wrap/driver/redis";
 import { Redis } from "ioredis";
+import { redisDriver } from "memo-wrap/driver/redis";
 
-const cache = createCacheWrap({
+const memo = createMemoWrap({
   driver: redisDriver({
     redis: new Redis(),
   }),
@@ -130,11 +130,11 @@ const cache = createCacheWrap({
 ### unstorage
 
 ```ts
-import { unstorageDriver } from "cache-wrap/driver/unstorage";
+import { unstorageDriver } from "memo-wrap/driver/unstorage";
 import { createStorage } from "unstorage";
 import cloudflareKVBindingDriver from "unstorage/drivers/cloudflare-kv-binding";
 
-const cache = createCacheWrap({
+const memo = createMemoWrap({
   driver: unstorageDriver({
     storage: createStorage({
       driver: cloudflareKVBindingDriver({ binding: "CACHE" }),
@@ -149,8 +149,8 @@ const cache = createCacheWrap({
 You can create your own driver by using the `defineDriver` function:
 
 ```ts
-import { defineDriver } from "cache-wrap/driver/builder";
 import { Redis } from "ioredis";
+import { defineDriver } from "memo-wrap/driver/builder";
 
 interface RedisDriverOpts {
   redis: Redis;
@@ -172,7 +172,7 @@ export const redisDriver = defineDriver<string, RedisDriverOpts>(
   },
 );
 
-const cache = createCacheWrap({
+const memo = createMemoWrap({
   driver: redisDriver({
     redis: new Redis(),
   }),
