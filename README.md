@@ -2,6 +2,16 @@
 
 Cache the result of function calls
 
+![Code example](docs/code.png)
+
+## Installation
+
+```sh
+npm i memo-wrap
+```
+
+## Usage
+
 ```ts
 import { createMemoWrap } from "memo-wrap";
 import { memoryDriver } from "memo-wrap/driver/memory";
@@ -12,7 +22,7 @@ const memo = createMemoWrap({
   serializer: jsonSerializer(), // How to serialize the cache value (json, superjson, v8, etc)
 });
 
-const add = cache(
+const add = memo(
   // The function to cache
   async (a: number, b: number) => {
     await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -25,17 +35,11 @@ const add = cache(
   },
 );
 
-// The first call will take 3000 second
+// The first call will take 3 second
 console.log(await add(1, 2));
 
 // The second call will be instant
 console.log(await add(1, 2));
-```
-
-## Installation
-
-```sh
-npm i memo-wrap
 ```
 
 ## Serializers
