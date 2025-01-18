@@ -38,7 +38,8 @@
   "scripts": {
     "build": "tsup",
     "lint": "prettier --check . && tsc",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "release": "pnpm run build && changeset version && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.11",
